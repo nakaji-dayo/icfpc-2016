@@ -22,3 +22,5 @@ executable contest
                      , diagrams-lib
                      , diagrams-svg
                      , MissingH
+                     , hgeometric
+                     , containers

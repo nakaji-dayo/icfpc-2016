@@ -1,0 +1,2 @@
+* Rewrite tarballs.sh in haskell.
+* Rewrite runTests.sh in haskell.

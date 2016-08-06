@@ -8,12 +8,33 @@ import Diagrams.Prelude
 import Diagrams.Backend.SVG.CmdLine
 import Data.Ratio
 import Data.List.Utils
+import Algebra.Geometric
+import qualified Data.Set as S
+
+debug = putStrLn . show
+
+main = do
+    debug $ area $ polySQ
+    debug $ area $ poly1
+    debug $ area $ ((polySQ /\ poly1) :: Polygon)
+    debug $ testScore polySQ poly1
+    debug $ testScore poly2 poly1
+    debug $ testScore poly1 poly1
+
+mkPoly contour = PolygonC (S.fromList [(False, contour)])
+polySQ = mkPoly $ ContourC [VertexC 0 0, VertexC 1 0, VertexC 1 1, VertexC 0 1]
+poly1 = mkPoly $ ContourC [VertexC 0 0, VertexC 1 0, VertexC (0.5) (0.5), VertexC 0 (0.5)]
+poly2 = mkPoly $ ContourC [VertexC 0 0, VertexC 1 0, VertexC 1 0.5, VertexC 0 0.5]
+
+
+testScore :: Polygon -> Polygon -> Double
+testScore tested prob = (area (tested /\ prob :: Polygon)) / (area tested)
 
 mapFst f (a, b) = (f a, b)
 mapSnd f (a, b) = (a, f b)
 
 -- main = (lines <$> getContents) >>= (mainWith . drawVertices . fst . drawProblem)
-main = (lines <$> getContents) >>= (mainWith . (uncurry (===)) . (mapFst drawVertices) . (mapSnd drawLines) . drawProblem)
+drawP = (lines <$> getContents) >>= (mainWith . (uncurry (===)) . (mapFst drawVertices) . (mapSnd drawLines) . drawProblem)
   where append (x, y) = y # x
 -- main = getContents >>= practice1 . lines
 

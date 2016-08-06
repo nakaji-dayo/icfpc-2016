@@ -1,0 +1,14 @@
+In Debian systems, ./Setup.hs doesn't include links to the GHC docs, giving the
+following error message:
+
+Warning: cannot use package base-2.0:
+   HTML directory /usr/share/ghc-6.6/html/libraries/base does not exist.
+Warning: Algebra.Geometric.Area: the following names could not be resolved:
+    Double
+Warning: Algebra.Geometric.Contour: the following names could not be resolved:
+    Ord Show Eq Double
+Warning: Algebra.Geometric.Gpc: the following names could not be resolved:
+    IO unsafePerformIO Ptr CInt Storable Int FilePath Bool Maybe Nothing String True False CChar
+
+There's a bug filled against the Debian package in
+http://bugs.debian.org/401785 .

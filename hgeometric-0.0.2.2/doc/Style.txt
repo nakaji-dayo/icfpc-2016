@@ -1,0 +1,116 @@
+Here are some ideas of Layout Style for the code:
+
+== function definition ==
+
+function parameter = oneLineDefinition
+
+function parameter =
+    moreThan
+    oneLine
+    definition
+
+== do ==
+
+do notation is considered a function with more than one line:
+
+function parameter =
+    do
+    commands
+
+Each <- follows the rules of the function definition:
+
+    result <- oneLineMonad
+
+    result <-
+        moreThan
+        oneLine
+        monad
+
+It's better to use >> >>= instead of the do notation, even inside a do
+expression.
+
+== [] () ==
+
+If the container of these have only one line, they should be opened and closed
+in the same line:
+
+   list = [element1, element2]
+   function2 = (function parameter)
+
+If they do not fit in one line:
+   list = [
+        element1,
+        element2]
+   function2 = (
+        function
+        parameter)
+
+== Data definition ==
+
+If there's only one constructor it should have the type name followed by C.
+
+deriving should be kept in a separate line unless all fits in one line.
+
+{} should follow [] () rules, except that one there are more than one field,
+they should be in more than one line, even if it fits in one line.
+
+    data Example = ExampleC {field :: Field} deriving Show
+
+    data Example =
+        ExampleC {
+            field1 :: Field1,
+            field2 :: Field2}
+        deriving Show
+
+| should keep one line per field if they all don't fit in one line.
+
+    data Small = One | Two
+
+    data Big =
+        First Integer |
+        Second String |
+        Example {
+            field1 :: Field1,
+            field2 :: Field2}
+        deriving Show
+
+== if ==
+
+Not in a do expression:
+    if expression
+    then
+    moreThan
+    OneLine
+    else oneLine
+
+In a do expression:
+    if expression
+        then oneLine
+        else
+        moreThan
+        OneLine
+
+== case ==
+
+Not in a do expression:
+    case expression of
+    case1 ->
+        moreThan
+        OneLine
+    case2 -> oneLine
+
+In a do expression:
+    case expression of
+        case1 -> oneLine
+        case2 ->
+            moreThan
+            OnLine
+
+== Modules ==
+
+Import hiding should be prefered instead of qualified.
+
+== Class and Instance ==
+
+Different functions should be separed with an Enter if one of them doesn't fit
+in one line.

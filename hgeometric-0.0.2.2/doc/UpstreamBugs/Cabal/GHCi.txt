@@ -1,0 +1,7 @@
+After a install, it's impossible to load the module with GHCi using :module +
+Algebra.Geometric.Gpc, giving the error message:
+
+module main:Algebra.Geometric.Gpc is not loaded
+
+There's a bug report about it in GHC's bug tracker:
+http://hackage.haskell.org/trac/ghc/ticket/1125 .
