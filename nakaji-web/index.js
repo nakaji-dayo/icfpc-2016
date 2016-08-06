@@ -1,4 +1,4 @@
-var Fraction = require('fractional').Fraction
+var math = require('mathjs');
 const _ = require('lodash');
 
 function fold(l, z, f) {
@@ -236,6 +236,24 @@ function O(c, z) {
   })
 }
 var I = [
+  // [!1, [
+  //   [
+  //     [new Fraction(0), new Fraction(0)],
+  //     [new Fraction(0), new Fraction(0)]
+  //   ],
+  //   [
+  //     [new Fraction(1), new Fraction(0)],
+  //     [new Fraction(1), new Fraction(0)]
+  //   ],
+  //   [
+  //     [new Fraction(1), new Fraction(1)],
+  //     [new Fraction(1), new Fraction(1)]
+  //   ],
+  //   [
+  //     [new Fraction(0), new Fraction(1)],
+  //     [new Fraction(0), new Fraction(1)]
+  //   ]
+  // ]]
   [!1, [
     [
       [0, 0],
@@ -265,29 +283,33 @@ $(function() {
 
 const output = (i = I) => {
   console.log('i', JSON.stringify(i, null, 4));
+  const allPolys = i.map(x => x[1].map(y => y.map(z => z.map(a => math.fraction(a)))))
+  console.log('all polys', JSON.stringify(allPolys, null, 4));
+  
+  
   let results = [];
 
   // 頂点
-  const allVerts = fold(i, [], (acc, x) => {
-    const vecs = x[1]; // from -> to
+  const allFromVerts = fold(allPolys, [], (acc, vecs) => {
     return acc.concat(fold(vecs, [], (acc_, y) => {
-      return push(push(acc_, y[0]), y[1]);
+      return push(acc_, y[0]);
     }));
   })
-  console.log('allVerts', allVerts);
-  const srcVerts = _.uniqWith(allVerts, _.isEqual);
+  console.log('allVerts', allFromVerts);
+  const srcVerts = _.uniqWith(allFromVerts, (a, b) =>
+                              math.equal(a[0], b[0]) && math.equal(a[1], b[1]));
   console.log('srcVerts', srcVerts);
   results.push(srcVerts.length);
   srcVerts.forEach(x => {
-    results.push((toFStr(x[0]) + ',' + toFStr(x[1])));
+    results.push((showF(x[0]) + ',' + showF(x[1])));
   })
+  
   // 折り目ん
-  results.push(i.length);
-  i.forEach(x => {
-    const vecs = x[1];
+  results.push(allPolys.length);
+  allPolys.forEach(vecs => {
     const froms = vecs.map(fst);
     const indecies = froms.map(x => {
-      const r =  srcVerts.findIndex(s => s[0] == x[0] && s[1] == x[1]);
+      const r =  srcVerts.findIndex(s => math.equal(s[0], x[0]) && math.equal(s[1], x[1]));
       if (r == -1) {
         console.error('error 1');
       }
@@ -296,20 +318,19 @@ const output = (i = I) => {
     results.push(`${froms.length} ${_.join(indecies, ' ')}`);
   })
   //　行き先
-  const allVecs = fold(i, [], (acc, x) => {
-    const vecs = x[1]; // from -> to
+  const allVecs = fold(allPolys, [], (acc, vecs) => {
     return acc.concat(vecs);
   })
 
   srcVerts.forEach(x => {
-    const i = allVecs.findIndex(vec => 
-                      vec[0][0] == x[0] && vec[0][1] == x[1]
-                               );
+    const i = allVecs.findIndex(vec => math.equal(vec[0][0], x[0]) && math.equal(vec[0][1], x[1]));
     if (i == -1) {
-      console.error('error 2');
+      console.log('allVecs', showListVecs(allVecs));
+      console.error('error 2', showTupleF(x));
+      console.log(_.join(results, '\n'));
     }
     const toV = allVecs[i][1];
-    results.push(toFStr(toV[0]) + ',' + toFStr(toV[1]));
+    results.push(showF(toV[0]) + ',' + showF(toV[1]));
   });
   console.log(_.join(results, '\n'));
 }
@@ -317,10 +338,27 @@ const output = (i = I) => {
 const fst = xs => xs[0];
 
 const toFStr = (d) => {
-  let f = new Fraction(d)
-  return f.numerator + '/' + f.denominator;
+  let f = new math.fraction(d)
+  return f.n + '/' + f.d;
 }
 
+const showF = (f) => {
+  return f.n + '/' + f.d;
+}
+
+const showTupleF = (fs) => {
+  return '(' + showF(fs[0]) + ', ' + showF(fs[1]) + ')';
+}
+
+const showListVertex = (vs) => {
+  console.log('vs', vs);
+  return vs.map(showTupleF);
+}
+
+const showListVecs = (vs) => {
+  console.log('vs', vs[0][0]);
+  return vs.map(vec => showTupleF(vec[0]) + ' -> ' + showTupleF(vec[1]));
+}
 
 const sampleI =   [
   [
