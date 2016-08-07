@@ -2,6 +2,19 @@ var math = require('mathjs');
 const _ = require('lodash');
 var Shape = require('clipper-js');
 
+// const verts2Shape = vs => new Shape([vs.map(v => ({X: v[0], Y: v[1]}))]);
+// //let s1 = verts2Shape([[0,0], [1,0], [0.5, 0.5], [0, 0.5]]);
+// //let s2 = verts2Shape([[0,0], [1,0], [1,1], [0,1]]);
+// let s1 = new Shape([[{X:0, Y:0}, {X:1, Y:0}, {X:0.5, Y: 0.5}, {X:0, Y: 0.5}]]);
+// let s2 = new Shape([[{X:0, Y:0}, {X:1, Y:0}, {X:1, Y:1}, {X:0, Y:1}]]);
+// let s1_ = s1.clone(),
+//     s2_ = s2.clone();
+// s1_.scaleUp(10000);
+// s2_.scaleUp(10000)
+// console.log(s1_,s2_);
+// let s = s1_.intersect(s2_);
+// console.log(s);
+
 function fold(l, z, f) {
   for (var i = 0; i < l.length; i++) z = f(z, l[i]);
   return z;
@@ -84,6 +97,9 @@ $('#solve2').click(() => {
     return fold(I, null, (acc, i) => {
       let verts = i[1].map(x => x[1]);
       let poly = verts.length >= 3 ? verts2Shape(verts) : null;
+      if (poly) {
+        poly.scaleUp(gRate);
+      }
       if (acc && poly) {
         console.log('acc', acc, poly.totalArea());
         if (poly.totalArea() <= 0) {
@@ -95,19 +111,27 @@ $('#solve2').click(() => {
       }
     })
   }
-  
+
+  let firstRegion = verts2Shape([[0,0], [1,0], [1,1], [0,1]]);
+  console.log('first region', polyS, firstRegion, polyS.intersect(firstRegion));
+  var lastScore = scoreing(firstRegion, polyS, true)
   vecs.forEach((vec) =>{
+    console.log('------start test -----')
     let mv = f(vec);
     Z(mv[0], mv[1]);
     let curRegion = g();
     let use = false
     try {
-    console.log('curRegion', curRegion, polyS);
-      console.log('score', curRegion.union(polyS));
+      var score = scoreing(curRegion, polyS, false);
+      console.log('score', score, lastScore);
+      if (score > lastScore) {
+        lastScore = score;
+        use = 1;
+      }
     } catch(e) {
-      console.error('score', e);
+      console.log('ERR score', e);
     }
-    if (confirm('use?')) {
+    if (use) {
     } else {
       if (G.length >= 1) I = G.pop();
       B(I)
@@ -115,7 +139,21 @@ $('#solve2').click(() => {
   });
 });
 
-const verts2Shape = vs => new Shape(vs.map(v => ({X: v[0], Y: v[1]})));
+const verts2Shape = vs => new Shape([vs.map(v => ({X: v[0], Y: v[1]}))]);
+
+const gRate = 10000;
+const scoreing = (f, t, suf) => {
+  let f2 = f.clone();
+  let t2 = t.clone();
+  if (suf) {
+    f2.scaleUp(gRate);
+  }
+  t2.scaleUp(gRate);
+  console.log('f, t', f, t);
+  let s = f2.intersect(t2);
+  console.log('s', s);
+  return s.totalArea() / f2.totalArea();
+}
 
 //j: from
 //z: to
