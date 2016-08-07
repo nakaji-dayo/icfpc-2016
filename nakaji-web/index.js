@@ -112,31 +112,46 @@ $('#solve2').click(() => {
     })
   }
 
-  let firstRegion = verts2Shape([[0,0], [1,0], [1,1], [0,1]]);
-  console.log('first region', polyS, firstRegion, polyS.intersect(firstRegion));
-  var lastScore = scoreing(firstRegion, polyS, true)
-  vecs.forEach((vec) =>{
-    console.log('------start test -----')
-    let mv = f(vec);
-    Z(mv[0], mv[1]);
-    let curRegion = g();
-    let use = false
-    try {
-      var score = scoreing(curRegion, polyS, false);
-      console.log('score', score, lastScore);
-      if (score > lastScore) {
-        lastScore = score;
-        use = 1;
+  const h = (r) => {
+    let firstRegion = g();
+    console.log('first region', polyS, firstRegion, polyS.intersect(firstRegion));
+    var lastScore = scoreing(firstRegion, polyS, false)
+    vecs.forEach((vec) =>{
+      console.log('------start test -----', r)
+      let mv = f(vec);
+      let gl = G.length;
+      if (r) {
+        Z(-mv[0], -mv[1]);
+      } else {
+        Z(mv[0], mv[1]);
       }
-    } catch(e) {
-      console.log('ERR score', e);
-    }
-    if (use) {
-    } else {
-      if (G.length >= 1) I = G.pop();
-      B(I)
-    }
-  });
+     if (gl == G.length) {
+       return;
+     }
+      let curRegion = g();
+      let use = false
+      try {
+        var score = scoreing(curRegion, polyS, false);
+        console.log('score', score, lastScore);
+        if (score > lastScore) {
+          lastScore = score;
+          use = 1;
+        }
+      } catch(e) {
+        console.log('ERR score', e);
+      }
+      if (use) {
+        console.log('foled');
+      } else {
+        //undo
+        console.log('undo')
+        if (G.length >= 1) I = G.pop();
+        B(I)
+      }
+    });
+  }
+  h(false);
+  h(true);
 });
 
 const verts2Shape = vs => new Shape([vs.map(v => ({X: v[0], Y: v[1]}))]);
