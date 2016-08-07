@@ -151,8 +151,9 @@ const scoreing = (f, t, suf) => {
   t2.scaleUp(gRate);
   console.log('f, t', f, t);
   let s = f2.intersect(t2);
-  console.log('s', s);
-  return s.totalArea() / f2.totalArea();
+  let u = f2.union(t2)
+  console.log('s u', s, u);
+  return s.totalArea() / u.totalArea();
 }
 
 //j: from
