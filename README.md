@@ -1,5 +1,12 @@
 # icfpc-2016
 
+## Solution  submission
+```
+- ID: 1: N
+- ID: 2: N
+- ID: 684: N-0.857811
+```
+
 ## Problem submission
 
 ```
