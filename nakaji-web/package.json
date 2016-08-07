@@ -11,7 +11,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "fractional": "^1.0.0"
+    "clipper-js": "0.0.4",
+    "fractional": "^1.0.0",
+    "polygon": "^1.0.2",
+    "victor": "^1.1.0"
   },
   "devDependencies": {
     "babel-core": "^6.13.2",

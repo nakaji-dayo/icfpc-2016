@@ -1,12 +1,50 @@
 <html>
   <head>
     <title>test</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   </head>
   <body>
-    <h1>test</h1>
-    <canvas id="src" width="300" height="300"></canvas>
-    <canvas id="dst" width="300" height="300"></canvas>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script src="./dist.js"></script>
+    <div id="origami">
+      <h1>test</h1>
+      <canvas id="src" width="300" height="300"></canvas>
+      <canvas id="dst" width="800" height="800"></canvas>
+      <div class="btn-group">
+        <button id="undo" type="button" class="btn btn-default">Undo</button>
+        <button id="flip" type="button" class="btn btn-default">Flip</button>
+        <button id="output" type="button" class="btn btn-default">Output</button>
+        <button id="solve" type="button" class="btn btn-default">Solve</button>
+        <button id="solve2" type="button" class="btn btn-default">Solve2</button>
+        <button id="use" type="button" class="btn btn-default">use</button>
+        <button id="notUse" type="button" class="btn btn-default">not use</button>
+        <div id="texture" class="btn-group dropup">
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Texture <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li data-texture-id="1" class="active"><a href="#">Flowers Red</a></li>
+            <li data-texture-id="2"><a href="#">Flower Wave</a></li>
+            <li data-texture-id="3"><a href="#">Flowers Yellow-green</a></li>
+            <li data-texture-id="4"><a href="#">Japanese apricot Red</a></li>
+            <li role="separator" class="divider"></li>
+            <li data-texture-id=""><a href="#">Skeleton</a></li>
+          </ul>
+        </div>
+      </div>
+      <div id="silhouette" class="btn-group dropup">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Silhouette <span class="caret"></span>
+        </button>
+        <ul id="silhouette-list" class="dropdown-menu">
+          <li data-silhouette-id="" class="active"><a href="#">(none)</a></li>
+        </ul>
+      </div>
+      <div>
+        <textarea id="problemInput"></textarea>
+      </div>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+      <script src="./dist.js"></script>
+    </div>
   </body>
 </html>
